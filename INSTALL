@@ -1,0 +1,19 @@
+ Compiling:
+ 
+ - Configure Kaldi to build static libraries and compile all running `make -j n` (being n the number of CPUs you have), create a folder called `lib` inside `sample` folder and drag all Kaldi `.a` files to it.
+ - Create a new folder inside kaldi/src and drag `online2-pcm-nnet3-decode-faster.(cc/h)` and `Makefile`. Run `make -j n` (being n the number of CPUs you have), please ignore the warnings.
+ - Drag `kaldi-pcm-decoder.a` to `sample/lib/` and rename it to `libkaldi-pcm-decoder.a`.
+ - Run `compile.sh` inside `sample`. (Yes we gonna move to a makefile in the future). It should create for you a executable.
+ 
+Running:
+
+Drag your executable to `kaldi/src/online2bin` and mind that you need these files too:
+
+  - `../../egs/aspire/s5/exp/tdnn_7b_chain_online/conf/online.conf`
+  - `../../egs/aspire/s5/exp/tdnn_7b_chain_online/final.mdl`
+  - `../../egs/aspire/s5/exp/tdnn_7b_chain_online/tpro_asr_graph/HCLG.fst`
+  - `../../egs/aspire/s5/exp/tdnn_7b_chain_online/tpro_asr_graph/words.txt`
+  - `../../test.wav` <-- Any wav file of samp-freq 22000
+
+Then run:
+./run --samp-freq=22000 --frames-per-chunk=20 --config=../../egs/aspire/s5/exp/tdnn_7b_chain_online/conf/online.conf --extra-left-context-initial=0 --frame-subsampling-factor=3 --min-active=200 --max-active=7000 --beam=15.0 --lattice-beam=9.0 --acoustic-scale=1.0 ../../egs/aspire/s5/exp/tdnn_7b_chain_online/final.mdl ../../egs/aspire/s5/exp/tdnn_7b_chain_online/tpro_asr_graph/HCLG.fst ../../egs/aspire/s5/exp/tdnn_7b_chain_online/tpro_asr_graph/words.txt ../../test.wav
